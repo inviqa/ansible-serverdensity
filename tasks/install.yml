@@ -4,7 +4,7 @@
   shell: >
           curl --silent \
                --show-error \
-               {{ serverdesity_x_connect_url }} \
+               {{ serverdensity_x_connect_url }} \
           | bash -s -- \
           -a {{ serverdensity_account_name }} \
           -t {{ serverdensity_api_token }} \
@@ -19,7 +19,7 @@
 # restart is needed to generate the jcagent.config file
 - name: restart ServerDesity
   service:
-    name:  "{{ serverdesity_agent_service }}"
+    name:  "{{ serverdensity_agent_service }}"
     state: restarted
   become: "{{ serverdensity_use_sudo }}"
 ...
