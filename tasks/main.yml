@@ -6,7 +6,7 @@
 
 - name:       check if ServerDesity is installed
   set_fact:
-    serverdensity_not_installed: "{{ not (serverdensity_directory.stat.isreg is defined and serverdensity_directory.stat.isreg) }}"
+    serverdensity_not_installed: "{{ not (serverdensity_directory_status.stat.isreg is defined and serverdensity_directory_status.stat.isreg) }}"
 
 - name:       Install ServerDesity if required
   include:    install.yml
@@ -15,11 +15,11 @@
 - name:       check ServerDesity agent directory again
   stat:
     path:     "{{ serverdensity_directory }}"
-  register:   serverdensity_agent_config_status
+  register:   serverdensity_directory_status
 
 - name:       check again if ServerDesity is installed
   set_fact:
-    serverdensity_is_installed: "{{ serverdensity_directory.stat.isreg is defined and serverdensity_directory.stat.isreg}}"
+    serverdensity_is_installed: "{{ serverdensity_directory_status.stat.isreg is defined and serverdensity_directory_status.stat.isreg}}"
 
 - name:       Update System Attributes if ServerDesity is insalled
   include:    update_system.yml
