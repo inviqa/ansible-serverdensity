@@ -1,0 +1,7 @@
+---
+
+- name: restart ServerDensity
+  service:
+    name:  "{{ serverdensity_agent_service }}"
+    state: restarted
+...

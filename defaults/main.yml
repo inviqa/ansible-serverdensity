@@ -1,0 +1,12 @@
+---
+serverdensity_agent_service: "sd-agent"
+serverdensity_directory: $HOME/.sd-agent
+serverdensity_account_name: "{{ enc_serverdensity_account_name }}"
+serverdensity_api_token: "{{ enc_serverdensity_api_token }}"
+serverdensity_x_connect_url: 'https://archive.serverdensity.com/agent-install-source.sh'
+serverdensity_group: "Ansible"
+serverdensity_tag: "ansible"
+serverdensity_hosting_provider: "unknown"
+serverdensity_force_install: no
+serverdensity_use_sudo: no
+...

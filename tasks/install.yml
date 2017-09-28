@@ -1,0 +1,25 @@
+---
+
+- name: Install ServerDesity Agent
+  shell: >
+          curl --silent \
+               --show-error \
+               {{ serverdesity_x_connect_url }} \
+          | bash -s -- \
+          -a {{ serverdensity_account_name }} \
+          -t {{ serverdensity_api_token }} \
+          -g {{ serverdensity_group }} \
+          -T "{{ serverdensity_tag }}" \
+          -p {{ serverdensity_hosting_provider }}
+
+  become: "{{ serverdesity_use_sudo }}"
+  # notify:
+  #   - restart ServerDesity
+
+# restart is needed to generate the jcagent.config file
+- name: restart ServerDesity
+  service:
+    name:  "{{ serverdesity_agent_service }}"
+    state: restarted
+  become: "{{ serverdesity_use_sudo }}"
+...

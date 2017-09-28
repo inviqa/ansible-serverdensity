@@ -1,0 +1,48 @@
+---
+# - name: Get ServerDesity SystemKey
+#   command: grep -o -P '(?<=systemKey\":\")[a-zA-Z0-9]*' {{ serverdesity_agent_config }}
+#   register: serverdesity_system_key
+#   become: "{{ serverdesity_use_sudo }}"
+#
+# - name: Update System Information
+#   command: >
+#           curl -iq \
+#                    -d '{
+#                       "tags" : [ {{ '"' + serverdesity_tags|join('", "') + '"' }} ],
+#                       "displayName" : "{{ serverdesity_displayName }}",
+#                       "allowPublicKeyAuthentication" : "{{ serverdesity_allowPublicKeyAuthentication }}",
+#                       "allowSshPasswordAuthentication" : "{{ serverdesity_allowSshPasswordAuthentication }}",
+#                       "allowSshRootLogin" : "{{ serverdesity_allowSshRootLogin }}",
+#                       "allowMultiFactorAuthentication" : "{{ serverdesity_allowMultiFactorAuthentication }}"
+#                     }' \
+#                    -X 'PUT' \
+#                    -H 'Content-Type: application/json' \
+#                    -H 'Accept: application/json' \
+#                    -H 'x-api-key: {{ serverdesity_api_key }}' \
+#                    "{{ serverdesity_api_url }}/systems/{{ serverdesity_system_key.stdout }}"
+#   delegate_to: localhost
+#   #no_log: True
+#   when: serverdesity_system_key is defined
+#   become: "{{ serverdesity_use_sudo }}"
+
+# It would be more elegant to use the URI: syntax..but can't see how to pass the data in the correct format needed to the RESTAPI
+# can't understand if it has to go { "body:" { "comtent: { "data"}"}}... or somewhere else
+# - name: Update System Information
+#   uri:
+#     url: "{{ serverdesity_api_url }}/systems/{{ serverdesity_system_key.stdout }}"
+#     headers:
+#       Content-Type: 'application/json'
+#       Accept:       'application/json'
+#       x-api-key:    "{{ serverdesity_api_key }}"
+#     body_format:  json
+#     body:
+#       content:
+#         tags: ["xxx","yyy","zzz"]
+#         displayName: "{{ serverdesity_displayName }}"
+#     method: PUT
+#     follow_redirects: all
+#     return_content: yes
+#   delegate_to: localhost
+#   register: http_outcome
+
+...
