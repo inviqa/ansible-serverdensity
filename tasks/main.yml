@@ -1,25 +1,37 @@
 ---
-- name:       check ServerDesity agent directory
+- name:       check if ServerDesity Agent is installed
   stat:
-    path:     "{{ serverdensity_directory }}"
-  register:   serverdensity_directory_status
+    path:     "{{ serverdensity_agent_path }}"
+  register:   serverdensity_agent_path_status
 
-- name:       check if ServerDesity is installed
-  set_fact:
-    serverdensity_not_installed: "{{ not (serverdensity_directory_status.stat.isreg is defined and serverdensity_directory_status.stat.isreg) }}"
+- set_fact:
+    serverdensity_is_installed: "{{ (serverdensity_agent_path_status.stat.isreg is defined and serverdensity_agent_path_status.stat.isreg) }}"
 
-- name:       Install ServerDesity if required
+- debug:
+    msg:  "Warning ==> ServerDesity Agent is not installed on the provisioned box"
+  when: not serverdensity_is_installed
+
+- debug:
+    msg:  "Info ==> ServerDesity Agent is already installed on the provisioned box"
+  when:  serverdensity_is_installed
+
+- name:       Install ServerDesity on the provisioned box
   include:    install.yml
-  when:       serverdensity_not_installed or serverdensity_force_install
+  when:       not serverdensity_is_installed or serverdensity_force_install
 
-- name:       check ServerDesity agent directory again
+- name:       check if ServerDesity Agent has been installed now
   stat:
-    path:     "{{ serverdensity_directory }}"
-  register:   serverdensity_directory_status
+    path:     "{{ serverdensity_agent_path }}"
+  register:   serverdensity_agent_path_status
+  when:       not serverdensity_is_installed or serverdensity_force_install
 
-- name:       check again if ServerDesity is installed
-  set_fact:
-    serverdensity_is_installed: "{{ serverdensity_directory_status.stat.isreg is defined and serverdensity_directory_status.stat.isreg}}"
+- set_fact:
+    serverdensity_is_installed: "{{ (serverdensity_agent_path_status.stat.isreg is defined and serverdensity_agent_path_status.stat.isreg) }}"
+  when:       not serverdensity_is_installed or serverdensity_force_install
+
+- debug:
+    msg:  "Warning ==> ServerDesity Agent is not installed on the provisioned box"
+  when: not serverdensity_is_installed
 
 - name:       Update System Attributes if ServerDesity is insalled
   include:    update_system.yml

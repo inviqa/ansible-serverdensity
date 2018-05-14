@@ -1,20 +1,39 @@
 ---
+- name: Remove previously installed package
+  yum:
+    name: sd-agent
+    state: absent
+  when: ansible_os_family == "RedHat" and serverdensity_force_install
+  become: "{{ serverdensity_use_sudo }}"
 
-- name: Install ServerDesity Agent
-  shell: >
-          curl --silent \
-               --show-error \
-               {{ serverdensity_x_connect_url }} \
-          | bash -s -- \
+- name: Remove previously installed package
+  apt:
+    name: sd-agent
+    state: absent
+  when: ansible_os_family == "Debian" and serverdensity_force_install
+  become: "{{ serverdensity_use_sudo }}"
+
+- name: Download ServerDensity Agent Install script
+  get_url:
+    url: "{{ serverdensity_x_connect_url }}"
+    dest: "{{ serverdensity_agent_install_script }}"
+    mode: 0755
+  become: "{{ serverdensity_use_sudo }}"
+
+- name: Install ServerDesity Agent on the provisioned host
+  shell: '{{ serverdensity_agent_install_script }} \
           -a {{ serverdensity_account_name }} \
           -t {{ serverdensity_api_token }} \
           -g {{ serverdensity_group }} \
           -T "{{ serverdensity_tag }}" \
-          -p {{ serverdensity_hosting_provider }}
-
+          -p {{ serverdensity_hosting_provider }}'
+  args:
+    creates: "/etc/init.d/{{ serverdensity_agent_service }}"
+  register: serverdensity_installation_status
   become: "{{ serverdensity_use_sudo }}"
-  # notify:
-  #   - restart ServerDesity
+
+- debug:
+    msg: "SD Installation Status ==> {{ serverdensity_installation_status}}"
 
 # restart is needed to generate the jcagent.config file
 - name: restart ServerDesity

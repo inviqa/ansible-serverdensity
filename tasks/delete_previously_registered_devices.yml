@@ -1,0 +1,6 @@
+---
+- name: Retrive the list of devices with the same name as the provisioned
+- name: Delete all previously registered devices the same name as the provisioned
+  when: previously_registered_devices_are_present
+
+...

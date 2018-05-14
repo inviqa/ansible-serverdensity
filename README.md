@@ -14,11 +14,14 @@ Default: sd-agent
 ServerDensity service name
 --------
 #### [`serverdensity_account_name`][serverdensity-account-name]
-Default: none
+Default: "{{ enc_serverdensity_account_name }}"
+
 ServerDensity account name without URL (e.g. abc not abc.serverdensity.io)"
 
+To be stored in an Ansible Vault. It's very high-sensitivity Information.
+
 #### [`serverdensity_api_token`][serverdensity-api-token]
-Default: none
+Default: "{{ enc_serverdensity_api_token }}"
 
 The API token as shown in the ServerDensity's Security Settings.
 To be retrieved from ServerDensity portal by a SD admin account
@@ -40,7 +43,7 @@ Default: unknown
 
 Optional: Provider ID (requires provider). Cloud device ID (instance ID for EC2 devices)"
 
-#### [`serverdensity_directory`][serverdensity-directory]
+#### [`serverdensity_agent_path`][serverdensity-directory]
 Default: `$HOME/.sd-agent`
 
 Path to check if ServerDensity has been previously installed.
@@ -75,9 +78,6 @@ Whether or not to use sudo during installation.
     serverdensity_hosting_provider: "DO"
 ...
 ```
-## TODO
-- [ ] implement the "-i" option of the agent installation script: Provider ID
-
 ## License
 -------
 
