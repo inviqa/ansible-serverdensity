@@ -15,6 +15,10 @@
     msg:  "Info ==> ServerDesity Agent is already installed on the provisioned box"
   when:  serverdensity_is_installed
 
+- name:       Delete Previously Registered Devices with the same hostname
+  include:    delete_previously_registered_devices.yml
+  when:       not serverdensity_is_installed or serverdensity_force_install
+
 - name:       Install ServerDesity on the provisioned box
   include:    install.yml
   when:       not serverdensity_is_installed or serverdensity_force_install

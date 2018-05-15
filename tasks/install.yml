@@ -32,9 +32,9 @@
   register: serverdensity_installation_status
   become: "{{ serverdensity_use_sudo }}"
 
-- debug:
-    msg: "SD Installation Status ==> {{ serverdensity_installation_status}}"
-
+# - debug:
+#     msg: "SD Installation Status ==> {{ serverdensity_installation_status}}"
+#
 # restart is needed to generate the jcagent.config file
 - name: restart ServerDesity
   service:
