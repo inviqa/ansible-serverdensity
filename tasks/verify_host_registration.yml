@@ -7,7 +7,6 @@
   register: devices_with_same_hostname
   delegate: localhost
 
-
 - set_fact:
     id_of_the_registered_device: "{{ devices_with_same_hostname.json.0._id}}"
   when: devices_with_same_hostname.json and devices_with_same_hostname.json|count == 1
@@ -24,11 +23,13 @@
     msg: "{{ devices_with_same_hostname.json }}"
   when:  devices_with_same_hostname.json and devices_with_same_hostname.json|count >1
 
-
 - debug:
     msg: "ID o the registered Device ==> {{id_of_the_registered_device}}"
   when:  id_of_the_registered_device is defined
 
+- debug:
+    msg: "Agent Key detected on the provisioned host ==> {{serverdensity_agent_key}}"
+  when:  serverdensity_agent_key is defined
 
 - pause:
 ...

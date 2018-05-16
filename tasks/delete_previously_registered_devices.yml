@@ -11,10 +11,6 @@
     msg: "{{ devices_with_same_hostname.json }}"
   when:  devices_with_same_hostname.json
 
-- debug:
-    msg: "Info ==> There is no device registered with the same hostname"
-  when: not devices_with_same_hostname.json
-
 - name: Delete all the previously registered devices with the same name as the provisioned
   uri:
     url: https://api.serverdensity.io/inventory/devices/{{item._id}}?token={{serverdensity_api_token}}
@@ -24,6 +20,10 @@
   delegate: localhost
   with_items: "{{ devices_with_same_hostname.json }}"
   when:  devices_with_same_hostname.json
+
+- debug:
+    msg: "Info ==> There is no device registered with the same hostname"
+  when: not devices_with_same_hostname.json
 
 # - debug:
 #     msg: "{{ deleted_devices_result }}"
