@@ -13,6 +13,11 @@
   when: ansible_os_family == "Debian" and serverdensity_force_install
   become: "{{ serverdensity_use_sudo }}"
 
+- name: Install ServerDensity Agent from source
+  set_fact:
+    serverdensity_x_connect_url: "{{ serverdensity_agent_install_url_source }}"
+  when: serverdensity_install_from_source
+
 - name: Download ServerDensity Agent Install script
   get_url:
     url: "{{ serverdensity_x_connect_url }}"
@@ -32,8 +37,8 @@
   register: serverdensity_installation_status
   become: "{{ serverdensity_use_sudo }}"
 
-# - debug:
-#     msg: "SD Installation Status ==> {{ serverdensity_installation_status}}"
+- debug:
+    msg: "SD Installation Status ==> {{ serverdensity_installation_status}}"
 #
 # restart is needed to generate the jcagent.config file
 - name: restart ServerDesity

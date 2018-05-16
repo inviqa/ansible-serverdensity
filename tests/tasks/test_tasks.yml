@@ -1,11 +1,11 @@
 ---
 - name:       check if ServerDesity Agent is installed
   stat:
-    path:     "{{ serverdensity_agent_path }}"
-  register:   serverdensity_agent_path_status
+    path:     "{{ serverdensity_agent_conf }}"
+  register:   serverdensity_agent_conf_status
 
 - set_fact:
-    serverdensity_is_installed: "{{ (serverdensity_agent_path_status.stat.isreg is defined and serverdensity_agent_path_status.stat.isreg) }}"
+    serverdensity_is_installed: "{{ (serverdensity_agent_conf_status.stat.isreg is defined and serverdensity_agent_conf_status.stat.isreg) }}"
 
 - debug:
     msg: "ServerDesity Agent was successfully installed on the box"

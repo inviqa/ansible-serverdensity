@@ -43,10 +43,10 @@ Default: unknown
 
 Optional: Provider ID (requires provider). Cloud device ID (instance ID for EC2 devices)"
 
-#### [`serverdensity_agent_path`][serverdensity-directory]
-Default: `$HOME/.sd-agent`
+#### [`serverdensity_agent_conf`][serverdensity-agent-conf]
+Default: `/etc/sd-agent/config.cfg`
 
-Path to check if ServerDensity has been previously installed.
+Path to check if ServerDensity is installed.
 
 #### [`serverdensity_x_connect_url`][serverdensity-x-connect-url]
 Default: 'https://archive.serverdensity.com/agent-install-source.sh'
@@ -62,6 +62,11 @@ Used to determine whether or not to force installation of the client if it has b
 Default: `no`
 
 Whether or not to use sudo during installation.
+
+#### [`serverdensity_install_from_source`][serverdensity-install-from-source]
+Default: `no`
+
+Whether or not to install ServerDesity Agent from source (instead of precompiled packages)
 
 
 ## Example Playbook

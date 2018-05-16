@@ -34,7 +34,8 @@
     serverdensity_tags: "test"
     serverdensity_hosting_provider: "DO"
     serverdensity_use_sudo: yes
-    serverdensity_force_install: yes
+    serverdensity_force_install: no
+    serverdensity_install_from_source: no
 
   roles:
     - { role: ansible-serverdensity }

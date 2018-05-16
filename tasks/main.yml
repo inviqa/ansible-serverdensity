@@ -1,11 +1,11 @@
 ---
 - name:       check if ServerDesity Agent is installed
   stat:
-    path:     "{{ serverdensity_agent_path }}"
-  register:   serverdensity_agent_path_status
+    path:     "{{ serverdensity_agent_conf }}"
+  register:   serverdensity_agent_conf_status
 
 - set_fact:
-    serverdensity_is_installed: "{{ (serverdensity_agent_path_status.stat.isreg is defined and serverdensity_agent_path_status.stat.isreg) }}"
+    serverdensity_is_installed: "{{ (serverdensity_agent_conf_status.stat.isreg is defined and serverdensity_agent_conf_status.stat.isreg) }}"
 
 - debug:
     msg:  "Warning ==> ServerDesity Agent is not installed on the provisioned box"
@@ -25,19 +25,23 @@
 
 - name:       check if ServerDesity Agent has been installed now
   stat:
-    path:     "{{ serverdensity_agent_path }}"
-  register:   serverdensity_agent_path_status
+    path:     "{{ serverdensity_agent_conf }}"
+  register:   serverdensity_agent_conf_status
   when:       not serverdensity_is_installed or serverdensity_force_install
 
 - set_fact:
-    serverdensity_is_installed: "{{ (serverdensity_agent_path_status.stat.isreg is defined and serverdensity_agent_path_status.stat.isreg) }}"
+    serverdensity_is_installed: "{{ (serverdensity_agent_conf_status.stat.isreg is defined and serverdensity_agent_conf_status.stat.isreg) }}"
   when:       not serverdensity_is_installed or serverdensity_force_install
 
 - debug:
     msg:  "Warning ==> ServerDesity Agent is not installed on the provisioned box"
   when: not serverdensity_is_installed
 
-- name:       Update System Attributes if ServerDesity is insalled
+- name:       Verify Host registration in ServerDesity
+  include:    verify_host_registration.yml
+  when:       serverdensity_is_installed
+
+- name:       Update System Attributes if ServerDesity is insalled and registered
   include:    update_system.yml
   when:       serverdensity_is_installed
 ...
