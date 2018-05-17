@@ -7,9 +7,9 @@
   register: devices_with_same_hostname
   delegate: localhost
 
-- debug:
-    msg: "{{ devices_with_same_hostname.json }}"
-  when:  devices_with_same_hostname.json
+# - debug:
+#     msg: "{{ devices_with_same_hostname.json }}"
+#   when:  devices_with_same_hostname.json
 
 - name: Delete all the previously registered devices with the same name as the provisioned
   uri:

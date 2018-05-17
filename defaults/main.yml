@@ -1,18 +1,17 @@
 ---
-serverdensity_agent_service: "sd-agent"
-serverdensity_agent_conf: "/etc/sd-agent/config.cfg"
-serverdensity_account_name: "{{ enc_serverdensity_account_name }}"
-serverdensity_api_token: "{{ enc_serverdensity_api_token }}"
-ServerDensity_api_url: "https://api.serverdensity.io"
+serverdensity_agent_service: 'sd-agent'
+serverdensity_agent_conf: '/etc/sd-agent/config.cfg'
 serverdensity_agent_install_url: 'https://archive.serverdensity.com/agent-install.sh'
 serverdensity_agent_install_url_source: 'https://archive.serverdensity.com/agent-install-source.sh'
+serverdensity_agent_install_script: '/tmp/agent-install.sh'
+serverdensity_agent_install_from_source: no
+serverdensity_account_name: "{{ enc_serverdensity_account_name }}"
+serverdensity_api_token: "{{ enc_serverdensity_api_token }}"
+serverdensity_api_url: 'https://api.serverdensity.io'
 serverdensity_x_connect_url: "{{ serverdensity_agent_install_url }}"
-serverdensity_agent_install_script: "/tmp/agent-install.sh"
-serverdensity_group: "Ansible"
-serverdensity_tag: "ansible"
-serverdensity_hosting_provider: "unknown"
+serverdensity_group: 'Ansible'
+serverdensity_tag: 'ansible'
+serverdensity_hosting_provider: 'unknown'
 serverdensity_force_install: no
 serverdensity_use_sudo: no
-serverdensity_install_from_source: no
-
 ...

@@ -1,4 +1,21 @@
 ---
+
+- name: Check if the device has been registered on ServerDesity searching for it with the AgentKey
+  uri:
+    url: https://api.serverdensity.io/inventory/resources?token={{serverdensity_api_token}}&filter={"agentKey":"{{serverdensity_agent_key }}","type":"device"}&fields=["_id","name"]
+    method: GET
+    body_format: raw
+  register: devices_with_same_agent_key
+  delegate: localhost
+
+- debug:
+    msg: "The Devices {{devices_with_same_agent_key.json.0.name}} has been properly registered with the ID {{devices_with_same_agent_key.json.0._id}} in ServerDesity"
+  when:  devices_with_same_agent_key.json
+
+- debug:
+    msg: "Error ==> The Devices with Agent Key {{serverdensity_agent_key}} has NOT been properly registered in ServerDesity"
+  when:  not devices_with_same_agent_key.json
+
 - name: Retrive the list of devices with the same name as the provisioned
   uri:
     url: https://api.serverdensity.io/inventory/resources?token={{serverdensity_api_token}}&filter={"name":"{{ansible_hostname}}","type":"device"}&fields=["_id","name"]
@@ -7,29 +24,15 @@
   register: devices_with_same_hostname
   delegate: localhost
 
-- set_fact:
-    id_of_the_registered_device: "{{ devices_with_same_hostname.json.0._id}}"
-  when: devices_with_same_hostname.json and devices_with_same_hostname.json|count == 1
-
 - debug:
     msg: "Warning ==> There is no device registered with the same hostname"
   when: not devices_with_same_hostname.json
 
 - debug:
-    msg: "Warning ==> There are {{ devices_with_same_hostname.json | count}} devices registered with the same hostname"
+    msg: "Warning ==> There are {{ devices_with_same_hostname.json | count}} devices registered with the hostname {{ansible_hostname}}"
   when:  devices_with_same_hostname.json and devices_with_same_hostname.json|count >1
 
 - debug:
     msg: "{{ devices_with_same_hostname.json }}"
   when:  devices_with_same_hostname.json and devices_with_same_hostname.json|count >1
-
-- debug:
-    msg: "ID o the registered Device ==> {{id_of_the_registered_device}}"
-  when:  id_of_the_registered_device is defined
-
-- debug:
-    msg: "Agent Key detected on the provisioned host ==> {{serverdensity_agent_key}}"
-  when:  serverdensity_agent_key is defined
-
-- pause:
 ...

@@ -1,12 +1,12 @@
 ---
-- name: Remove previously installed package
+- name: Remove previously installed package for YUM based systems
   yum:
     name: sd-agent
     state: absent
   when: ansible_os_family == "RedHat" and serverdensity_force_install
   become: "{{ serverdensity_use_sudo }}"
 
-- name: Remove previously installed package
+- name: Remove previously installed package for APT based systems
   apt:
     name: sd-agent
     state: absent
@@ -16,7 +16,7 @@
 - name: Install ServerDensity Agent from source
   set_fact:
     serverdensity_x_connect_url: "{{ serverdensity_agent_install_url_source }}"
-  when: serverdensity_install_from_source
+  when: serverdensity_agent_install_from_source
 
 - name: Download ServerDensity Agent Install script
   get_url:

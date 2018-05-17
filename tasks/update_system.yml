@@ -8,7 +8,7 @@
 #   command: >
 #           curl -iq \
 #                    -d '{
-#                       "tags" : [ {{ '"' + serverdensity_tags|join('", "') + '"' }} ],
+#                       "tags" : [ {{ '"' + serverdensity_tag|join('", "') + '"' }} ],
 #                       "displayName" : "{{ serverdensity_displayName }}",
 #                       "allowPublicKeyAuthentication" : "{{ serverdensity_allowPublicKeyAuthentication }}",
 #                       "allowSshPasswordAuthentication" : "{{ serverdensity_allowSshPasswordAuthentication }}",

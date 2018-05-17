@@ -31,11 +31,11 @@
     ansible_ssh_user: 'vagrant'
     ansible_ssh_port: 22
     serverdensity_group: 'Inviqa'
-    serverdensity_tags: "test"
-    serverdensity_hosting_provider: "DO"
+    serverdensity_tag: "test"
+    serverdensity_hosting_provider: "virtualbox"
     serverdensity_use_sudo: yes
-    serverdensity_force_install: no
-    serverdensity_install_from_source: no
+    serverdensity_force_install: yes
+    serverdensity_agent_install_from_source: no
 
   roles:
     - { role: ansible-serverdensity }

@@ -37,18 +37,22 @@
     msg:  "Warning ==> ServerDesity Agent is not installed on the provisioned box"
   when: not serverdensity_is_installed
 
-
 - name:        Get ServerDesity Agent Key
-  command:     grep -o -P '(?<=agent_key\":\")[a-zA-Z0-9]*' {{ serverdensity_agent_conf }}
-  register:    serverdensity_agent_key
+  #command:     grep -o -P '(?<=agent_key:\s)[a-zA-Z0-9]*' {{ serverdensity_agent_conf }}
+  shell:       grep "agent_key:" {{ serverdensity_agent_conf }} | cut -d':' -f2 | tr -d '"',' '
+  register:    serverdensity_agent_key_result
   become:      "{{ serverdensity_use_sudo }}"
   when:        serverdensity_is_installed
+
+- set_fact:
+    serverdensity_agent_key: "{{serverdensity_agent_key_result.stdout}}"
+  when: serverdensity_agent_key_result is defined
 
 - name:       Verify Host registration in ServerDesity
   include:    verify_host_registration.yml
   when:       serverdensity_is_installed
 
-- name:       Update System Attributes if ServerDesity is insalled and registered
-  include:    update_system.yml
-  when:       serverdensity_is_installed
+# - name:       Update System Attributes if ServerDesity is insalled and registered
+#   include:    update_system.yml
+#   when:       serverdensity_is_installed
 ...
