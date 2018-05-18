@@ -25,12 +25,12 @@ Path to check if ServerDensity is installed.
 #### [`serverdensity_agent_install_url`][serverdensity-agent-install-url]
 Default: `https://archive.serverdensity.com/agent-install.sh`
 
-URL to the ServerDesity Agent install script that uses precompiled packages.
+URL to the ServerDensity Agent install script that uses precompiled packages.
 
 #### [`serverdensity_agent_install_url_source`][serverdensity-agent-install-url-source]
 Default: `https://archive.serverdensity.com/agent-install-source.sh`
 
-URL to the ServerDesity Agent install script that will compile the agent from source.
+URL to the ServerDensity Agent install script that will compile the agent from source.
 
 #### [`serverdensity_agent_install_script`][serverdensity-agent-install-script]
 Default: `/tmp/agent-install.sh`
@@ -40,7 +40,7 @@ Path to destination file for the Agent Install script that will be downloaded.
 #### [`serverdensity_agent_install_from_source`][serverdensity-agent-install-from-source]
 Default: `no`
 
-Whether or not to install ServerDesity Agent from source (instead of precompiled packages)
+Whether or not to install ServerDensity Agent from source (instead of precompiled packages)
 
 #### [`serverdensity_account_name`][serverdensity-account-name]
 Default: `"{{ enc_serverdensity_account_name }}"`
@@ -119,7 +119,7 @@ Whether or not to use sudo during installation.
 ------------
 ## Author Information
 
-Author Marco Massari Calderone at Inviq UK Ltd
+Author Marco Massari Calderone at Inviqa UK Ltd
 
 [github]: https://github.com/inviqa/ansible-serverdensity "Github location of this role"
 [curl]: https://galaxy.ansible.com/list#/roles/4384

@@ -1,6 +1,6 @@
 ---
 
-- name: Check if the device has been registered on ServerDesity searching for it with the AgentKey
+- name: Check if the device has been registered on ServerDensity searching for it with the AgentKey
   uri:
     url: https://api.serverdensity.io/inventory/resources?token={{serverdensity_api_token}}&filter={"agentKey":"{{serverdensity_agent_key }}","type":"device"}&fields=["_id","name"]
     method: GET
@@ -9,11 +9,11 @@
   delegate: localhost
 
 - debug:
-    msg: "The Devices {{devices_with_same_agent_key.json.0.name}} has been properly registered with the ID {{devices_with_same_agent_key.json.0._id}} in ServerDesity"
+    msg: "The Devices {{devices_with_same_agent_key.json.0.name}} has been properly registered with the ID {{devices_with_same_agent_key.json.0._id}} in ServerDensity"
   when:  devices_with_same_agent_key.json
 
 - debug:
-    msg: "Error ==> The Devices with Agent Key {{serverdensity_agent_key}} has NOT been properly registered in ServerDesity"
+    msg: "Error ==> The Devices with Agent Key {{serverdensity_agent_key}} has NOT been properly registered in ServerDensity"
   when:  not devices_with_same_agent_key.json
 
 - name: Retrive the list of devices with the same name as the provisioned

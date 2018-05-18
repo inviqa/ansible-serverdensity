@@ -1,5 +1,5 @@
 ---
-- name:       check if ServerDesity Agent is installed
+- name:       check if ServerDensity Agent is installed
   stat:
     path:     "{{ serverdensity_agent_conf }}"
   register:   serverdensity_agent_conf_status
@@ -8,22 +8,22 @@
     serverdensity_is_installed: "{{ (serverdensity_agent_conf_status.stat.isreg is defined and serverdensity_agent_conf_status.stat.isreg) }}"
 
 - debug:
-    msg:  "Warning ==> ServerDesity Agent is not installed on the provisioned box"
+    msg:  "Warning ==> ServerDensity Agent is not installed on the provisioned box"
   when: not serverdensity_is_installed
 
 - debug:
-    msg:  "Info ==> ServerDesity Agent is already installed on the provisioned box"
+    msg:  "Info ==> ServerDensity Agent is already installed on the provisioned box"
   when:  serverdensity_is_installed
 
 - name:       Delete Previously Registered Devices with the same hostname
   include:    delete_previously_registered_devices.yml
   when:       not serverdensity_is_installed or serverdensity_force_install
 
-- name:       Install ServerDesity on the provisioned box
+- name:       Install ServerDensity on the provisioned box
   include:    install.yml
   when:       not serverdensity_is_installed or serverdensity_force_install
 
-- name:       check if ServerDesity Agent has been installed now
+- name:       check if ServerDensity Agent has been installed now
   stat:
     path:     "{{ serverdensity_agent_conf }}"
   register:   serverdensity_agent_conf_status
@@ -34,11 +34,10 @@
   when:       not serverdensity_is_installed or serverdensity_force_install
 
 - debug:
-    msg:  "Warning ==> ServerDesity Agent is not installed on the provisioned box"
+    msg:  "Warning ==> ServerDensity Agent is not installed on the provisioned box"
   when: not serverdensity_is_installed
 
-- name:        Get ServerDesity Agent Key
-  #command:     grep -o -P '(?<=agent_key:\s)[a-zA-Z0-9]*' {{ serverdensity_agent_conf }}
+- name:        Get ServerDensity Agent Key
   shell:       grep "agent_key:" {{ serverdensity_agent_conf }} | cut -d':' -f2 | tr -d '"',' '
   register:    serverdensity_agent_key_result
   become:      "{{ serverdensity_use_sudo }}"
@@ -48,11 +47,11 @@
     serverdensity_agent_key: "{{serverdensity_agent_key_result.stdout}}"
   when: serverdensity_agent_key_result is defined
 
-- name:       Verify Host registration in ServerDesity
+- name:       Verify Host registration in ServerDensity
   include:    verify_host_registration.yml
   when:       serverdensity_is_installed
 
-# - name:       Update System Attributes if ServerDesity is insalled and registered
+# - name:       Update System Attributes if ServerDensity is insalled and registered
 #   include:    update_system.yml
 #   when:       serverdensity_is_installed
 ...

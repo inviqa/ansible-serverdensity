@@ -25,7 +25,7 @@
     mode: 0755
   become: "{{ serverdensity_use_sudo }}"
 
-- name: Install ServerDesity Agent on the provisioned host
+- name: Install ServerDensity Agent on the provisioned host
   shell: '{{ serverdensity_agent_install_script }} \
           -a {{ serverdensity_account_name }} \
           -t {{ serverdensity_api_token }} \
@@ -41,7 +41,7 @@
     msg: "SD Installation Status ==> {{ serverdensity_installation_status}}"
 #
 # restart is needed to generate the jcagent.config file
-- name: restart ServerDesity
+- name: restart ServerDensity
   service:
     name:  "{{ serverdensity_agent_service }}"
     state: restarted
