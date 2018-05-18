@@ -2,9 +2,8 @@
 - hosts: localhost
   gather_facts: no
   tasks:
-    # - include_tasks: tasks/run_vagrant.yml
     - include_tasks: tasks/reset_ssh_agent.yml
-  vars_prompt:
+  # vars_prompt:
   # - name: "serverdensity_account_name"
   #   prompt: "Please provide your ServerDensity account name i.e. <name_of_your_company>"
   #   private: no
