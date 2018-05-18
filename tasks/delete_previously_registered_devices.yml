@@ -1,0 +1,34 @@
+---
+- name: Retrive the list of devices with the same name as the provisioned
+  uri:
+    url: https://api.serverdensity.io/inventory/resources?token={{serverdensity_api_token}}&filter={"name":"{{ansible_hostname}}","type":"device"}&fields=["_id","name"]
+    method: GET
+    body_format: raw
+  register: devices_with_same_hostname
+  delegate: localhost
+
+# - debug:
+#     msg: "{{ devices_with_same_hostname.json }}"
+#   when:  devices_with_same_hostname.json
+
+- name: Delete all the previously registered devices with the same name as the provisioned
+  uri:
+    url: https://api.serverdensity.io/inventory/devices/{{item._id}}?token={{serverdensity_api_token}}
+    method: DELETE
+    body_format: raw
+  register: deleted_devices_result
+  delegate: localhost
+  with_items: "{{ devices_with_same_hostname.json }}"
+  when:  devices_with_same_hostname.json
+
+- debug:
+    msg: "Info ==> There is no device registered with the same hostname"
+  when: not devices_with_same_hostname.json
+
+# - debug:
+#     msg: "{{ deleted_devices_result }}"
+
+# - name: Delete all previously registered devices the same name as the provisioned
+#   when: previously_registered_devices_are_present
+
+...

@@ -1,0 +1,24 @@
+---
+- name:       check if ServerDensity Agent is installed
+  stat:
+    path:     "{{ serverdensity_agent_conf }}"
+  register:   serverdensity_agent_conf_status
+
+- set_fact:
+    serverdensity_is_installed: "{{ (serverdensity_agent_conf_status.stat.isreg is defined and serverdensity_agent_conf_status.stat.isreg) }}"
+
+- debug:
+    msg: "ServerDensity Agent was successfully installed on the box"
+  when: serverdensity_is_installed
+
+- debug:
+    msg: "The Devices {{devices_with_same_agent_key.json.0.name}} has been properly registered with the ID {{devices_with_same_agent_key.json.0._id}} in ServerDensity"
+  when:  devices_with_same_agent_key.json
+
+- assert:
+    that:
+      - serverdensity_is_installed
+      - devices_with_same_agent_key.json
+    msg: "ServerDensity Agent was NOT successfully installed on the box or wasn't registered on ServerDensity"
+
+...

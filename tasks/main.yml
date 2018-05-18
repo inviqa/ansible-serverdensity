@@ -1,27 +1,57 @@
 ---
-- name:       check ServerDesity agent directory
+- name:       check if ServerDensity Agent is installed
   stat:
-    path:     "{{ serverdensity_directory }}"
-  register:   serverdensity_directory_status
+    path:     "{{ serverdensity_agent_conf }}"
+  register:   serverdensity_agent_conf_status
 
-- name:       check if ServerDesity is installed
-  set_fact:
-    serverdensity_not_installed: "{{ not (serverdensity_directory_status.stat.isreg is defined and serverdensity_directory_status.stat.isreg) }}"
+- set_fact:
+    serverdensity_is_installed: "{{ (serverdensity_agent_conf_status.stat.isreg is defined and serverdensity_agent_conf_status.stat.isreg) }}"
 
-- name:       Install ServerDesity if required
+- debug:
+    msg:  "Warning ==> ServerDensity Agent is not installed on the provisioned box"
+  when: not serverdensity_is_installed
+
+- debug:
+    msg:  "Info ==> ServerDensity Agent is already installed on the provisioned box"
+  when:  serverdensity_is_installed
+
+- name:       Delete Previously Registered Devices with the same hostname
+  include:    delete_previously_registered_devices.yml
+  when:       not serverdensity_is_installed or serverdensity_force_install
+
+- name:       Install ServerDensity on the provisioned box
   include:    install.yml
-  when:       serverdensity_not_installed or serverdensity_force_install
+  when:       not serverdensity_is_installed or serverdensity_force_install
 
-- name:       check ServerDesity agent directory again
+- name:       check if ServerDensity Agent has been installed now
   stat:
-    path:     "{{ serverdensity_directory }}"
-  register:   serverdensity_directory_status
+    path:     "{{ serverdensity_agent_conf }}"
+  register:   serverdensity_agent_conf_status
+  when:       not serverdensity_is_installed or serverdensity_force_install
 
-- name:       check again if ServerDesity is installed
-  set_fact:
-    serverdensity_is_installed: "{{ serverdensity_directory_status.stat.isreg is defined and serverdensity_directory_status.stat.isreg}}"
+- set_fact:
+    serverdensity_is_installed: "{{ (serverdensity_agent_conf_status.stat.isreg is defined and serverdensity_agent_conf_status.stat.isreg) }}"
+  when:       not serverdensity_is_installed or serverdensity_force_install
 
-- name:       Update System Attributes if ServerDesity is insalled
-  include:    update_system.yml
+- debug:
+    msg:  "Warning ==> ServerDensity Agent is not installed on the provisioned box"
+  when: not serverdensity_is_installed
+
+- name:        Get ServerDensity Agent Key
+  shell:       grep "agent_key:" {{ serverdensity_agent_conf }} | cut -d':' -f2 | tr -d '"',' '
+  register:    serverdensity_agent_key_result
+  become:      "{{ serverdensity_use_sudo }}"
+  when:        serverdensity_is_installed
+
+- set_fact:
+    serverdensity_agent_key: "{{serverdensity_agent_key_result.stdout}}"
+  when: serverdensity_agent_key_result is defined
+
+- name:       Verify Host registration in ServerDensity
+  include:    verify_host_registration.yml
   when:       serverdensity_is_installed
+
+# - name:       Update System Attributes if ServerDensity is insalled and registered
+#   include:    update_system.yml
+#   when:       serverdensity_is_installed
 ...
